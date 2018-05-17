@@ -10,8 +10,8 @@
 using namespace std; 
 
 typedef struct {
-	char* sequence;
-	char *cigar; 
+	string sequence;
+	string cigar; 
 	int mapping_quality; 
 	int * base_quality; 
 } read_t; 

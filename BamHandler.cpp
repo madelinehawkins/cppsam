@@ -36,27 +36,24 @@ void BamHandler::get_reads(string region, int start, int stop)
 	int position = 0; 
 	while(sam_itr_next(this->hts_file, this->iter, this->b) >= 0) {
 		// TODO: Init with a global variable  
-		char seq[1000000] = "";
+		string seq; 
 		uint8_t *seqi = bam_get_seq(this->b);
 		for (int i = 0; i < this->b->core.l_qseq; i++) {
 			// seq_nt16_str grabs the letter since bam_seqi returns 4-bit representing the base
-			append(seq, seq_nt16_str[bam_seqi(seqi, i)]); 
+			seq.append(seq_nt16_str[bam_seqi(seqi, i)]; 
 		}
 		// Getting the cigars
 		uint32_t *cigar = bam_get_cigar(this->b); 
-		char str_cigar[10000] = ""; 
+		string str_cigar; 
 		for(int k = 0; k < this->b->core.n_cigar; k++) {
 			const int op = bam_cigar_op(cigar[k]);
 			const int ol = bam_cigar_oplen(cigar[k]);
 
 			if (op == BAM_CMATCH || op == BAM_CINS || op == BAM_CDEL) {
 			// your code, you have the length in ol (eg: 101M -> ol == 101
-				// Converting the int to a string then appending 
-				char str_ol[10]; 
-				sprintf(str_ol, "%d", ol); 
-				strcat(str_cigar, str_ol); 
+				str_cigar.append(to_string(ol)); 
 				//The string version of it's a match/insert/deletion appended to the cigar
-				append(str_cigar, bam_cigar_opchr(op)); 
+				str_cigar.append(bam_cigar_opchr(op)); 
 			}
 		}
 		// Setting up the read_t struct with all the information from the read 
