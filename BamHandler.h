@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <string>
 #include <cstring> 
+#include <vector>
 #include <htslib/sam.h> 
 
 using namespace std; 
@@ -18,11 +19,13 @@ typedef struct {
 
 class BamHandler
 {
-	read_t* reads; 
 public:
+	// Vector of read structs that hold the information about the read 
+	vector<read_t> reads; 
+	
 	BamHandler(string path); 
 	// Sets up read struct for use 
-	void get_reads(string region, int start, int stop); 
+	void get_reads(string region, int start=0, int stop=0); 
 	~BamHandler();
 private: 
 	htsFile* hts_file; 
