@@ -56,9 +56,8 @@ void BamHandler::get_reads(string region, int start, int stop)
 		// Setting up the read_t struct with all the information from the read resizing the vector
 		reads.resize(position + 1); 
 		reads[position].sequence = seq; 
-		reads[position].mapping_quality = this->b->core.qual; 
+		reads[position].mapping_quality = b->core.qual; 
 		reads[position].cigar = str_cigar; 
-		//cout << position << endl; 
 		position++; 
 	}
 }
