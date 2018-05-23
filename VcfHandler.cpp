@@ -1,22 +1,8 @@
 #include "VcfHandler.h"
 #include <stdexcept>
 
-VariantRecord::VariantRecord(int mq, int gq, int dp, int pos, string ref, int qual, string genotype_class, int len, string alt) {
-	var_rec->mq = mq; 
-	var_rec->gq = gq; 
-	var_rec->dp = dp;
-	// What genotype am I? (Hom/Het/Hom_Alt) 
-	//var_rec->gt = 0;
-	var_rec->pos = pos; 
-	var_rec->ref = ref; 
-	var_rec->qual = qual; 
-	var_rec->genotype_class = genotype_class; 
-	var_rec->len = len; 
-	var_rec->alt = alt; 
-}
-
-variant_record * VariantRecord::get_record() {
-	return var_rec; 
+VariantRecord::VariantRecord(variant_record* rec) {
+	
 }
 
 VcfHandler::VcfHandler(string file_path)
@@ -51,26 +37,33 @@ int VcfHandler::get_total_hom_alt() {
 	return this->total_hom_alt; 
 }
 
-map<int, variant_record> VcfHandler::get_variant_map() {
+map<int, vector<variant_record> > VcfHandler::get_variant_map() {
 	return this->genotype_map; 
 }
 
 
 variant_record*  VcfHandler::populated_record(bcf1_t * rec, bcf_hdr_t * hdr) {
 	bcf_unpack(record, BCF_UN_ALL);
-	//variant_record* tmp_rec = NULL; 
-	//tmp_rec->pos = record->pos; 
-	//tmp_rec->qual = record->qual; 
 	
 	
-	cout << bcf_hdr_id2name(hdr, record->rid) << "\t" <<
-						rec->pos << "\t" <<
-						rec->n_allele << "\t" <<
-						rec->qual << "\t" <<
-						rec->rlen << "\t" <<
-						bcf_get_variant_types(rec) << "\t" << 
-						rec->d.allele[0] << "\t" << 
-						endl;
+	
+	variant_record tmp_rec; 
+	tmp_rec.pos = rec->pos; 
+	tmp_rec.qual = rec->qual;
+	tmp_rec.ref = string(rec->d.allele[0]);
+	tmp_rec.alt = string(rec->d.als); 
+	tmp_rec.len = rec->rlen; 
+	
+	cout << rec->d.n_var << endl; 
+	
+//	cout << bcf_hdr_id2name(hdr, record->rid) << "\t" <<
+//						rec->pos << "\t" <<
+//						rec->n_allele << "\t" <<
+//						rec->qual << "\t" <<
+//						rec->rlen << "\t" <<
+//						bcf_get_variant_types(rec) << "\t" << 
+//						rec->d.als << "\t" << 
+//						endl;
 }
 
 void VcfHandler::populate_dictionary(string contig, int start, int stop, bool hom_filters) {
