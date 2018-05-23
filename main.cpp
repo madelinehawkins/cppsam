@@ -4,6 +4,7 @@
 #include <vector>   
 #include "BamHandler.h"
 #include "FastaHandler.h"
+#include "VcfHandler.h"
 
 int main(int argc, char **argv)
 {
@@ -11,10 +12,6 @@ int main(int argc, char **argv)
 	string region = "chr1"; 
 	string what; 
 	int size; 
-	FastaHandler fasta_file = FastaHandler("chr1.fa"); 
-	what = fasta_file.get_sequence(region); 
-	size = fasta_file.get_chr_sequence_length(region); 
-	cout << what << endl; 
-	cout << size << endl; 
+	VcfHandler vcf_file = VcfHandler("NA12878_S1.genome.vcf.gz"); 
 	return 0;
 }

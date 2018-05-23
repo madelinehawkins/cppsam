@@ -8,6 +8,7 @@
 #include <string>
 #include <cstring> 
 #include <vector>
+#include <map> 
 
 using namespace std; 
 
@@ -21,7 +22,7 @@ typedef struct {
 	// Depth
 	int dp;
 	// Position in the Chromosome 
-	int pos; 
+	int pos;  // Done 
 	// Reference Base in that position
 	string ref; 
 	// Quality of the record
@@ -40,22 +41,29 @@ class VariantRecord
 {
 public: 
 	variant_record* var_rec; 
-	VariantRecord(mq, gq, dp, pos, ref, qual, genotype_class, len, alt);
+	VariantRecord(int mq, int gq, int dp, int pos, string ref, int qual, string genotype_class, int len, string alt);
 	// Allows use to get the populated record 
 	variant_record * get_record(); 
 	void print_record(); 
 	~VariantRecord(); 
-}
+};
 
 class VcfHandler
 {
 public:
 	VcfHandler(string file_path);
-	void populate_dictionary(string contig, int start, int stop, bool hom_filters=False); 
+	void populate_dictionary(string contig, int start, int stop, bool hom_filters=false); 
+	// Returns the genotype_map of variant records with key values based on position 
+	map<int, variant_record> get_variant_map(); 
+	int get_total_hom(); 
+	int get_total_het(); 
+	int get_total_hom_alt(); 
 	~VcfHandler();
 private: 
+	variant_record* populated_record(bcf1_t * rec, bcf_hdr_t * hdr);
 	htsFile * hts_file; 
 	bcf_hdr_t * header; 
+	bcf1_t * record; 
 	hts_itr_t * iter; 
 	hts_idx_t * idx; 
 	
